@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Report an Issue | CivicAction AI{% endblock %}
+{% block content %}
+<div class="page-head"><p class="eyebrow">CITIZEN PORTAL / NEW REPORT</p><h1>Report a local problem</h1><p>Share what happened and where. It takes less than a minute.</p></div>
+<form class="panel form-panel" method="POST" enctype="multipart/form-data">
+  <div class="form-grid">
+    <label>Your name<input name="citizen_name" maxlength="80" required placeholder="e.g. Asha Rao"></label>
+    <label>Issue category<select name="category"><option>Auto Detect</option><option>Road Damage</option><option>Waterlogging</option><option>Waste Management</option><option>Streetlight</option><option>Public Safety</option><option>Other</option></select></label>
+    <label class="full">Describe the problem<textarea name="description" rows="4" maxlength="1200" required placeholder="Explain the issue, its size, and how it affects people..."></textarea></label>
+    <label class="full">Location / area<input name="location" required placeholder="e.g. Main Road, Kankanady, Mangaluru"></label>
+    <label>Latitude <span class="optional">(optional)</span><input name="latitude" type="number" step="any" placeholder="12.9141"></label>
+    <label>Longitude <span class="optional">(optional)</span><input name="longitude" type="number" step="any" placeholder="74.8560"></label>
+    <label class="full">Attach image <span class="optional">(optional, max 5 MB)</span><input type="file" name="image" accept="image/*"></label>
+  </div>
+  <div class="notice"><b>AI analysis:</b> The system will suggest a category, summarize your report, check for similar reports and explain its priority score. An authority reviews the result.</div>
+  <button class="btn primary" type="submit">Submit complaint →</button>
+</form>
+{% endblock %}

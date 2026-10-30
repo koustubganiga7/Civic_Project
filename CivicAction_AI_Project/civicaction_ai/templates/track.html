@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Complaint #{{ complaint.id }} | CivicAction AI{% endblock %}
+{% block content %}
+<div class="page-head"><p class="eyebrow">CITIZEN PORTAL / TRACKING</p><h1>Complaint <span class="accent">#{{ complaint.id }}</span></h1><p>Submitted {{ complaint.created_at }}</p></div>
+<div class="section-grid">
+  <section class="panel"><div class="panel-heading"><h2>{{ complaint.category }}</h2><span class="priority {{ complaint.priority|lower }}">{{ complaint.priority }}</span></div>
+    <p>{{ complaint.description }}</p><div class="detail-row"><span>Location</span><b>{{ complaint.location }}</b></div><div class="detail-row"><span>Current status</span><b>{{ complaint.status }}</b></div><div class="detail-row"><span>Assigned to</span><b>{{ complaint.assigned_to or 'Not assigned yet' }}</b></div>
+    {% if complaint.image %}<img class="evidence" src="{{ url_for('static', filename='uploads/' + complaint.image) }}" alt="Complaint evidence">{% endif %}
+  </section>
+  <section class="panel"><p class="eyebrow">AI EXPLANATION</p><h2>Why this priority?</h2><div class="score">{{ complaint.priority_score }}<small>/100</small></div><span class="priority {{ complaint.priority|lower }}">{{ complaint.priority }} priority</span><p class="muted">{{ complaint.priority_reason }}</p><hr><h3>AI summary</h3><p>{{ complaint.summary }}</p>
+  {% if complaint.duplicate_of %}<div class="notice warning">Possible duplicate of complaint #{{ complaint.duplicate_of }}. Authority should verify before merging.</div>{% else %}<div class="notice">No likely duplicate found in the current report set.</div>{% endif %}
+  </section>
+</div>
+<section class="panel"><p class="eyebrow">WORKFLOW</p><h2>Progress</h2><div class="status-line"><span class="status-dot active"></span><b>Submitted</b><span class="muted">{{ complaint.created_at }}</span></div><div class="status-line"><span class="status-dot {{ 'active' if complaint.status in ['Under Review','Assigned','In Progress','Resolved'] else '' }}"></span><b>Review / assignment</b></div><div class="status-line"><span class="status-dot {{ 'active' if complaint.status in ['In Progress','Resolved'] else '' }}"></span><b>Action in progress</b></div><div class="status-line"><span class="status-dot {{ 'active' if complaint.status == 'Resolved' else '' }}"></span><b>Resolved</b><span class="muted">Last updated {{ complaint.updated_at }}</span></div></section>
+{% endblock %}

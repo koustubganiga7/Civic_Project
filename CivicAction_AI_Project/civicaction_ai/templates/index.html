@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | CivicAction AI{% endblock %}
+{% block content %}
+<section class="hero">
+  <div><p class="eyebrow">CITIZEN REPORTING · SMARTER PUBLIC SERVICES</p><h1>From complaints<br><span>to action.</span></h1>
+  <p class="hero-copy">One place to report local problems, understand what matters most, and follow every action.</p>
+  <a class="btn primary" href="{{ url_for('report') }}">＋ Report a problem</a>
+  <a class="btn secondary" href="{{ url_for('track_form') }}">Track a complaint</a></div>
+  <div class="hero-art"><div class="orbit">✦</div><div class="hero-card"><span class="pulse"></span><b>Community signal detected</b><small>AI-assisted · Explainable priority</small><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i></div></div></div>
+</section>
+<section class="stats">
+  <div class="stat"><small>Total reports</small><strong>{{ stats.total }}</strong><span>All submitted complaints</span></div>
+  <div class="stat"><small>Needs attention</small><strong>{{ stats.pending }}</strong><span>Open workflow items</span></div>
+  <div class="stat"><small>High priority</small><strong class="red">{{ stats.high }}</strong><span>High + critical</span></div>
+  <div class="stat"><small>Resolved</small><strong class="green">{{ stats.resolved }}</strong><span>Closed successfully</span></div>
+</section>
+<section class="section-grid">
+  <div class="panel wide"><div class="panel-heading"><div><p class="eyebrow">GEOGRAPHIC INSIGHTS</p><h2>Community map</h2></div><span class="tag">Live from database</span></div>
+    <div id="map" class="map"></div><p class="hint">Reports appear on this map when the citizen submits latitude and longitude.</p>
+  </div>
+  <div class="panel"><p class="eyebrow">RECURRING ISSUES</p><h2>Hotspot locations</h2>
+    {% if hotspots %}<ul class="hotspot-list">{% for h in hotspots %}<li><span>📍 {{ h.location }}</span><b>{{ h.count }}</b></li>{% endfor %}</ul>{% else %}<p class="muted">No location patterns yet. Submit sample reports to reveal hotspots.</p>{% endif %}
+  </div>
+</section>
+<section class="panel"><div class="panel-heading"><div><p class="eyebrow">LATEST ACTIVITY</p><h2>Recent complaints</h2></div><a href="{{ url_for('admin') }}" class="text-link">View all →</a></div>
+{% if recent %}<div class="table-wrap"><table><thead><tr><th>ID</th><th>Issue</th><th>Location</th><th>Priority</th><th>Status</th><th></th></tr></thead><tbody>
+{% for c in recent %}<tr><td>#{{ c.id }}</td><td><b>{{ c.category }}</b><small class="cell-sub">{{ c.summary }}</small></td><td>{{ c.location }}</td><td><span class="priority {{ c.priority|lower }}">{{ c.priority }}</span></td><td>{{ c.status }}</td><td><a href="{{ url_for('track', complaint_id=c.id) }}">Open</a></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty">No complaints yet. Be the first to report an issue.</div>{% endif %}
+</section>
+<section class="panel"><p class="eyebrow">REPORT BREAKDOWN</p><h2>Issues by category</h2><div class="category-bars">
+{% for row in category_rows %}<div class="bar-row"><span>{{ row.category }}</span><div class="bar-track"><i style="width: {{ [row.count * 12, 100]|min }}%"></i></div><b>{{ row.count }}</b></div>{% else %}<p class="muted">Category insights will appear after reports are submitted.</p>{% endfor %}
+</div></section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/map.js') }}"></script>{% endblock %}

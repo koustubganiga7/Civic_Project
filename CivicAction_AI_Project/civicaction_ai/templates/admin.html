@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Authority Panel | CivicAction AI{% endblock %}
+{% block content %}
+<div class="page-head"><p class="eyebrow">AUTHORIZED PERSONNEL / WORKFLOW</p><h1>Authority panel</h1><p>Review AI suggestions, assign teams and update complaint progress.</p></div>
+<div class="notice warning">Demo prototype: this authority panel has no authentication. Add secure login and role-based access before any real deployment.</div>
+<section class="panel"><div class="panel-heading"><h2>Prioritized complaint queue</h2><span class="tag">{{ complaints|length }} reports</span></div>
+{% if complaints %}<div class="table-wrap"><table><thead><tr><th>Report</th><th>AI assessment</th><th>Location</th><th>Explanation</th><th>Workflow update</th></tr></thead><tbody>
+{% for c in complaints %}<tr><td><b>#{{ c.id }} · {{ c.citizen_name }}</b><small class="cell-sub">{{ c.created_at }}</small><a href="{{ url_for('track', complaint_id=c.id) }}">Citizen view</a></td><td>{{ c.category }}<br><span class="priority {{ c.priority|lower }}">{{ c.priority }} · {{ c.priority_score }}/100</span></td><td>{{ c.location }}</td><td class="reason">{{ c.priority_reason }}{% if c.duplicate_of %}<br><b>Possible duplicate: #{{ c.duplicate_of }}</b>{% endif %}</td><td><form class="inline-form" method="POST" action="{{ url_for('update_complaint', complaint_id=c.id) }}"><select name="status">{% for s in ['Submitted','Under Review','Assigned','In Progress','Resolved','Rejected'] %}<option {% if c.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select><input name="assigned_to" placeholder="Assigned team" value="{{ c.assigned_to }}"><button class="btn small primary">Save</button></form></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty">No reports to review yet.</div>{% endif %}
+</section>
+{% endblock %}

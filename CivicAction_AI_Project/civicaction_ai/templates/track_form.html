@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Track Complaint | CivicAction AI{% endblock %}
+{% block content %}
+<div class="narrow page-head"><p class="eyebrow">CITIZEN PORTAL / TRACKING</p><h1>Where is your report?</h1><p>Enter the tracking ID shown after submitting your complaint.</p>
+<form class="panel track-search" method="POST"><label>Complaint tracking ID<input name="complaint_id" type="number" min="1" required placeholder="e.g. 12"></label><button class="btn primary">Find my report →</button></form></div>
+{% endblock %}
